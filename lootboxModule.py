@@ -5,34 +5,35 @@ gameLoot = {
     "rare" : ["machete","pistol","baseball bat"],
     "epic" : ["bolt action","shotgun","chainsaw"],
     "legendary" : ["50 Cal","silenced pistol","Shadow Kunai"]
-    
 }
 
+rarities = ["common","rare","epic","legendary"]
 
-def rarityGenerator():
-    x = random.randint(1,100)
-    return x
-    
-def lootGenerator():
-    lootnum = rarityGenerator()
+lootboxTypes = {
+    "common" : [60,85,97,100],
+    "rare" : [50,75,96,100],
+    "epic": [30,45,95,100],
+    "legendary": [30,50,85,100]
+}
 
-    if lootnum < 60:
-        return "common"
+def lootGenerator(lootboxName):
 
-    elif lootnum < 85:
-        return "rare"
+    probs = lootboxTypes[lootboxName]
+    roll = random.randint(1,100)
+    length = len(rarities)
     
-    elif lootnum < 97:
-        return "epic"
+    for rarity, threshold in zip(rarities,probs):
+        if roll <= threshold:
+            return rarity
     
-    else:
-        return "legendary"
-    
+def lootbox(lootboxName):
 
-def lootbox():
-    rarity = lootGenerator()
+    rarity = lootGenerator(lootboxName)
     item = random.choice(gameLoot[rarity])
-    return f'{rarity.upper()}: {item}'
 
-for i in range(1000):
-    print(lootbox())
+    loot = {
+        "rarity" : rarity,
+        "item" : item
+    }
+
+    return loot
